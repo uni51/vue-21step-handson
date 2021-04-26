@@ -13,40 +13,29 @@
   </tr>
 </template>
 
-<script>
-import { defineComponent, ref, nextTick } from '@vue/composition-api';
+<script lang="ts">
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
-export function User(nickname, email) {
-  this.nickname = nickname;
-  this.email = email;
+export interface User {
+  nickname: string;
+  email: string;
 }
 
-export default defineComponent({
-  props: {
-    user: {
-      type: User,
-      required: true,
-    },
-  },
-  setup() {
-    const editable = ref(false);
-    const editNickname = ref(null);
+@Component
+export default class UserRowComponent extends Vue {
+  @Prop({ required: true })
+  private user!: User;
 
-    const edit = () => {
-      editable.value = true;
-      nextTick(() => {
-        // DOM更新後に実行
-        editNickname.value.focus();
-      });
-    };
+  private editable = false;
 
-    return {
-      editable,
-      editNickname,
-      edit,
-    };
-  },
-});
+  private edit() {
+    this.editable = true;
+    this.$nextTick(() => {
+      // DOM更新後に実行
+      (this.$refs.editNickname as HTMLFormElement).focus();
+    });
+  }
+}
 </script>
 
 <style module>
