@@ -14,28 +14,40 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { defineComponent, ref, nextTick, PropType } from '@vue/composition-api';
 
 export interface User {
   nickname: string;
   email: string;
 }
 
-@Component
-export default class UserRowComponent extends Vue {
-  @Prop({ required: true })
-  private user!: User;
+export default defineComponent({
+  props: {
+    user: {
+      type: Object as PropType<User>,
+      required: true,
+    },
+  },
+  setup() {
+    const editable = ref(false);
+    const editNickname = ref<HTMLFontElement | null>(null);
 
-  private editable = false;
+    const edit = () => {
+      editable.value = true;
+      nextTick(() => {
+        // DOM更新後に実行
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        editNickname.value!.focus();
+      });
+    };
 
-  private edit() {
-    this.editable = true;
-    this.$nextTick(() => {
-      // DOM更新後に実行
-      (this.$refs.editNickname as HTMLFormElement).focus();
-    });
-  }
-}
+    return {
+      editable,
+      editNickname,
+      edit,
+    };
+  },
+});
 </script>
 
 <style module>
