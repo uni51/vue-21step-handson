@@ -43,9 +43,9 @@ export default defineComponent({
     return {
       editable,
       editNickname,
-      edit
-    }
-  }
+      edit,
+    };
+  },
 });
 </script>
 
