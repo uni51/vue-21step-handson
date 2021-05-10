@@ -15,7 +15,7 @@ export default defineComponent({
   setup(prop, context) {
     const calendar = () => {
       context.root.$router.push(
-        'calendar/month',
+        { name: 'calendar', params: { type: { hoge: 123, fuga: 'xyz' } } },
         () => {},
         () => {},
       );

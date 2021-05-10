@@ -13,9 +13,12 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: 'home',
     component: HomeComponent,
+    meta: {
+      title: 'home',
+    },
   },
   {
-    path: '/calender/:type',
+    path: '/calendar/:type',
     name: 'calendar',
     component: CalendarComponent,
     props: true,
@@ -41,6 +44,14 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+});
+
+router.afterEach(to => {
+  if (!to.meta.title) {
+    return;
+  }
+
+  document.title = to.meta.title;
 });
 
 export default router;
