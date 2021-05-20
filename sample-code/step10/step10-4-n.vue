@@ -48,7 +48,7 @@ export default defineComponent({
      */
     const saveUserName = () => {
       if (state.newUserName) {
-        profileStore.profile.userName = state.userName;
+        profileStore.profile.userName = state.newUserName;
       }
       state.isOpenEditUserNameDialog = false;
     };
