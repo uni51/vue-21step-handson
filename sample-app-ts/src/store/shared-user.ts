@@ -66,8 +66,22 @@ export const update = (profile: Profile) => {
  * 指定したニックネームの一部に前方一致するユーザーを検索します。
  * @param partOfNickname 前方一致で検索するユーザーのニックネームの一部
  */
- export const searchUsers = (partOfNickname: string) => {
+export const searchUsers = (partOfNickname: string) => {
   return sharedUserStore.sharedUsers.filter(user =>
     user.nickname.startsWith(partOfNickname),
   );
+};
+
+/**
+ * 指定したユーザーのテーマカラーを取得します。
+ * @param userId テーマカラーを取得するユーザーのID
+ */
+export const getThemeColor = (userId: string) => {
+  const defaultColor = '#f44336';
+  const user = sharedUserStore.sharedUsers.find(user => user.userId === userId);
+  if (!user) {
+    return defaultColor;
+  }
+
+  return user.themeColor;
 };
