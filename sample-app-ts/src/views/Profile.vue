@@ -47,7 +47,7 @@
         open-on-hover
       >
         <v-card>
-          <ValidationObserver v-slot="{ invalid }">
+          <ValidationObserver ref="userNameValidationObserver">
             <ValidationProvider
               v-slot="{ errors }"
               name="ユーザー名"
@@ -78,7 +78,7 @@
               <v-btn
                 color="blue darken-1"
                 text
-                :disabled="invalid"
+                :disabled="userNameSaveDisabled"
                 @click="saveUserName"
               >
                 保存する
@@ -101,7 +101,7 @@
         open-on-hover
       >
         <v-card>
-          <ValidationObserver v-slot="{ invalid }">
+          <ValidationObserver ref="nicknameValidationObserver">
             <ValidationProvider
               v-slot="{ errors }"
               name="ニックネーム"
@@ -132,7 +132,7 @@
               <v-btn
                 color="blue darken-1"
                 text
-                :disabled="invalid"
+                :disabled="nicknameSaveDisabled"
                 @click="saveNickname"
               >
                 保存する
@@ -157,6 +157,8 @@ import {
   reactive,
   toRefs,
   computed,
+  watch,
+  nextTick,
 } from '@vue/composition-api';
 import {
   profileStore,
@@ -164,11 +166,17 @@ import {
   updateUserName,
   updateNickname,
 } from '@/store/profile';
-import { validate } from 'vee-validate';
+import { validate, ValidationObserver } from 'vee-validate';
 
 export default defineComponent({
   setup() {
     const state = reactive({
+      userNameValidationObserver: null as InstanceType<
+        typeof ValidationObserver
+      > | null,
+      nicknameValidationObserver: null as InstanceType<
+        typeof ValidationObserver
+      > | null,
       // プロフィール
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       profile: profileStore.profile!,
@@ -185,6 +193,10 @@ export default defineComponent({
       isOpenEditNicknameDialog: false,
       // アバターのバリデーションエラーです。
       avatarErrors: null as string[] | null,
+      // 新しいユーザー名の保存が無効であるかどうかを示す値です。
+      userNameSaveDisabled: false,
+      // 新しいユーザー名の保存が無効であるかどうかを示す値です。
+      nicknameSaveDisabled: false,
       // バリデーションルールです。
       validationRules: computed(() => {
         return {
@@ -204,6 +216,40 @@ export default defineComponent({
         };
       }),
     });
+    /**
+     * 新しいユーザー名の保存が無効かどうかを判断します。
+     * 新しいユーザー名の値が変更される度に判定を行います。
+     */
+    watch(
+      () => state.newUserName,
+      () => {
+        nextTick(() => {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          state
+            .userNameValidationObserver!.validate({ silent: true })
+            .then(result => {
+              state.userNameSaveDisabled = !result;
+            });
+        });
+      },
+    );
+    /**
+     * 新しいニックネームの保存が無効かどうかを判断します。
+     * 新しいニックネームの値が変更される度に判定を行います。
+     */
+    watch(
+      () => state.newNickname,
+      () => {
+        nextTick(() => {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          state
+            .nicknameValidationObserver!.validate({ silent: true })
+            .then(result => {
+              state.nicknameSaveDisabled = !result;
+            });
+        });
+      },
+    );
     /**
      * アバターを保存します。
      * @param file アバターの画像ファイル
