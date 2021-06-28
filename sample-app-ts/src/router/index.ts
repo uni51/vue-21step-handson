@@ -5,6 +5,7 @@ import CalendarComponent from '@/views/Calendar.vue';
 import ProfileComponent from '@/views/Profile.vue';
 import ShareComponent from '@/views/Share.vue';
 import SignInComponent from '@/views/SignIn.vue';
+import { calendarRoutes } from '@/router/calendar/calendar';
 
 Vue.use(VueRouter);
 
@@ -17,12 +18,7 @@ const routes: Array<RouteConfig> = [
       title: 'home',
     },
   },
-  {
-    path: '/calendar/:type',
-    name: 'calendar',
-    component: CalendarComponent,
-    props: true,
-  },
+  ...calendarRoutes,
   {
     path: '/profile',
     name: 'profile',
