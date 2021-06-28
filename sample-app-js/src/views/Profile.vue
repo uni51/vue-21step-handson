@@ -167,6 +167,7 @@ import {
   updateNickname,
 } from '@/store/profile';
 import { validate } from 'vee-validate';
+import { ValidationItems } from '@/validation/validation-items';
 
 export default defineComponent({
   setup() {
@@ -196,16 +197,14 @@ export default defineComponent({
         return {
           nickname: {
             required: true,
-            max: 15,
+            ...ValidationItems.nickname,
           },
           userName: {
             required: true,
-            userNameAllowedCharacters: true,
-            max: 15,
+            ...ValidationItems.userName,
           },
           avatar: {
-            ext: ['png', 'jpeg', 'bmp'],
-            size: 300,
+            ...ValidationItems.avatar,
           },
         };
       }),
