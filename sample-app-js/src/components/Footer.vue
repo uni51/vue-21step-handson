@@ -57,7 +57,6 @@ import {
   toRefs,
   computed,
 } from '@vue/composition-api';
-import { profileStore } from '@/store/profile';
 
 export default defineComponent({
   setup(prop, context) {
@@ -71,11 +70,19 @@ export default defineComponent({
         },
         { title: '共有する', icon: 'share', methodName: 'share' },
       ],
+      // プロフィール情報を取得します。
+      profileGetter: computed(
+        () => context.root.$store.getters['profile/profile'],
+      ),
       // サインインしているユーザー
       signInUser: computed(() => {
-        return profileStore.profile;
+        return state.profileGetter;
       }),
     });
+    // ストアからプロフィール情報をクリアするミューテーションです。
+    const clearProfileMutation = () => {
+      context.root.$store.commit('profile/clearProfile');
+    };
     /**
      * メソッド名を指定してコンポーネントのメソッドを呼び出します。
      * @param {string} methodName 呼び出すメソッド名
@@ -110,7 +117,7 @@ export default defineComponent({
      * サインアウトします。
      */
     const signOut = () => {
-      profileStore.profile = null;
+      clearProfileMutation();
       routerPush('/sign-in');
     };
 
