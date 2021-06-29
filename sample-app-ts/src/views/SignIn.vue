@@ -1,6 +1,7 @@
 <template>
   <v-row align="center" justify="center">
     <v-col cols="12" md="6" class="text-center">
+      <my-example v-model="parentValue" />
       <p class="display-1 py-12">
         サンプルアプリケーションにサインインする
       </p>
@@ -42,11 +43,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, reactive, toRefs } from '@vue/composition-api';
 import { profileStore } from '@/store/profile/profile';
+import { MyExampleComponentParameter } from '@/components/MyExample.vue';
 
 export default defineComponent({
   setup(prop, context) {
+    const state = reactive({
+      parentValue: { foo: 'foo', bar: 'bar' } as MyExampleComponentParameter,
+    });
     /**
      * サインインします。
      */
@@ -60,6 +65,7 @@ export default defineComponent({
     };
 
     return {
+      ...toRefs(state),
       signIn,
     };
   },
