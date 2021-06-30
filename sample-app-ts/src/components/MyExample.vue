@@ -13,6 +13,7 @@ import {
   computed,
   PropType,
 } from '@vue/composition-api';
+import MixinExample from '@/mixins/mixin-example';
 
 export interface MyExampleComponentParameter {
   foo: string;
@@ -20,6 +21,7 @@ export interface MyExampleComponentParameter {
 }
 
 export default defineComponent({
+  mixins: [MixinExample],
   inheritAttrs: false,
   props: {
     value: {
@@ -28,6 +30,7 @@ export default defineComponent({
     },
   },
   setup(props, context) {
+    console.log('子コンポーネント: created');
     const state = reactive({
       computedFooValue: computed({
         get: () => {
