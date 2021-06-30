@@ -1,7 +1,12 @@
 <template>
   <v-row align="center" justify="center">
     <v-col cols="12" md="6" class="text-center">
-      <my-example v-model="parentValue" />
+      <my-example
+        v-model="parentValue"
+        counter="10"
+        clearable
+        @custom-event="customEventHandler"
+      />
       <p class="display-1 py-12">
         サンプルアプリケーションにサインインする
       </p>
@@ -63,10 +68,14 @@ export default defineComponent({
         console.log('error: ', error);
       }
     };
+    const customEventHandler = (value: number) => {
+      console.log('value: ', value);
+    };
 
     return {
       ...toRefs(state),
       signIn,
+      customEventHandler,
     };
   },
 });

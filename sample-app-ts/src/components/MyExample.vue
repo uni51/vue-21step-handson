@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-text-field v-model="computedFooValue" />
+    <v-text-field v-model="computedFooValue" v-bind="$attrs" />
+    <v-btn @click="click">click!</v-btn>
   </div>
 </template>
 
@@ -19,6 +20,7 @@ export interface MyExampleComponentParameter {
 }
 
 export default defineComponent({
+  inheritAttrs: false,
   props: {
     value: {
       type: Object as PropType<MyExampleComponentParameter>,
@@ -39,9 +41,13 @@ export default defineComponent({
         },
       }),
     });
+    const click = () => {
+      context.emit('custom-event', 100);
+    };
 
     return {
       ...toRefs(state),
+      click,
     };
   },
 });
