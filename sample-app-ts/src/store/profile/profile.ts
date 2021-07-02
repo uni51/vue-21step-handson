@@ -16,6 +16,7 @@ import axios from 'axios';
 const setStorage = (profile: Profile) => {
   sessionStorage.setItem('profile', JSON.stringify(profile));
 };
+
 @Module({ dynamic: true, store, name: 'profile', namespaced: true })
 class ProfileModule extends VuexModule {
   public profile: Profile | null = null;
@@ -43,7 +44,8 @@ class ProfileModule extends VuexModule {
   @Mutation
   private updateUserName(userName: string) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.profile!.userName = userName;
+    const profile = this.profile!;
+    profile.userName = userName;
     setStorage(profile);
   }
 
@@ -54,7 +56,8 @@ class ProfileModule extends VuexModule {
   @Mutation
   private updateNickname(nickname: string) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.profile!.nickname = nickname;
+    const profile = this.profile!;
+    profile.nickname = nickname;
     setStorage(profile);
   }
 
@@ -65,7 +68,8 @@ class ProfileModule extends VuexModule {
   @Mutation
   private updateThemeColor(themeColor: string) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.profile!.themeColor = themeColor;
+    const profile = this.profile!;
+    profile.themeColor = themeColor;
     setStorage(profile);
   }
 
