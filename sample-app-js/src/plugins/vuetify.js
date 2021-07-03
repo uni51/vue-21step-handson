@@ -1,8 +1,14 @@
 import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
-import ja from 'vuetify/lib/locale/ja';
+import Vuetify, { VSnackbar, VBtn, VIcon } from 'vuetify/lib';
+import ja from 'vuetify/es5/locale/ja';
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  components: {
+    VSnackbar,
+    VBtn,
+    VIcon,
+  },
+});
 
 export default new Vuetify({
   lang: {
