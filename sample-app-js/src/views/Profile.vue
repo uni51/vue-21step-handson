@@ -288,14 +288,10 @@ export default defineComponent({
      * ユーザー名を保存します。
      */
     const saveUserName = async () => {
-      try {
-        if (state.newUserName) {
-          await updateUserNameAction(state.newUserName);
-        }
-        state.isOpenEditUserNameDialog = false;
-      } catch (error) {
-        console.log('error: ', error.response?.data?.title);
+      if (state.newUserName) {
+        await updateUserNameAction(state.newUserName);
       }
+      state.isOpenEditUserNameDialog = false;
     };
     /**
      * ニックネームの編集を開始します。
