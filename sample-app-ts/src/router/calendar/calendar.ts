@@ -1,11 +1,11 @@
 import { RouteConfig } from 'vue-router';
-import CalendarComponent from '@/views/Calendar.vue';
 
 export const calendarRoutes: Array<RouteConfig> = [
   {
     path: '/calendar/:type',
     name: 'calendar',
-    component: CalendarComponent,
+    component: () =>
+      import(/* webpackChunkName: "calendar" */ '@/views/Calendar.vue'),
     props: true,
     meta: {
       title: 'calendar',
