@@ -86,6 +86,9 @@
             </v-card-actions>
           </ValidationObserver>
         </v-card>
+        <v-overlay :value="editUserNameDialogOverlay">
+          <v-progress-circular color="primary" indeterminate size="64" />
+        </v-overlay>
       </v-dialog>
       <v-text-field
         v-model="profile.nickname"
@@ -167,6 +170,7 @@ import { profileStore } from '@/store/profile/profile';
 export default defineComponent({
   setup() {
     const state = reactive({
+      editUserNameDialogOverlay: false,
       userNameValidationObserver: null as InstanceType<
         typeof ValidationObserver
       > | null,
@@ -289,7 +293,12 @@ export default defineComponent({
      */
     const saveUserName = async () => {
       if (state.newUserName) {
-        await profileStore.updateUserNameAsync(state.newUserName);
+        state.editUserNameDialogOverlay = true;
+        try {
+          await profileStore.updateUserNameAsync(state.newUserName);
+        } finally {
+          state.editUserNameDialogOverlay = false;
+        }
       }
       state.isOpenEditUserNameDialog = false;
     };

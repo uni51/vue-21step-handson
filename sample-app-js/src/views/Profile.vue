@@ -86,6 +86,9 @@
             </v-card-actions>
           </ValidationObserver>
         </v-card>
+        <v-overlay :value="editUserNameDialogOverlay">
+          <v-progress-circular color="primary" indeterminate size="64" />
+        </v-overlay>
       </v-dialog>
       <v-text-field
         v-model="profile.nickname"
@@ -166,6 +169,7 @@ import { ValidationItems } from '@/validation/validation-items';
 export default defineComponent({
   setup(prop, context) {
     const state = reactive({
+      editUserNameDialogOverlay: false,
       userNameValidationObserver: null,
       nicknameValidationObserver: null,
       // プロフィール
@@ -289,7 +293,12 @@ export default defineComponent({
      */
     const saveUserName = async () => {
       if (state.newUserName) {
-        await updateUserNameAction(state.newUserName);
+        state.editUserNameDialogOverlay = true;
+        try {
+          await updateUserNameAction(state.newUserName);
+        } finally {
+          state.editUserNameDialogOverlay = false;
+        }
       }
       state.isOpenEditUserNameDialog = false;
     };
